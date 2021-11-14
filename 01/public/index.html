@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul class="ul"></ul>
+    <br>
+    <form>
+        <input type="text" name="nombre" />
+        <input type="text" name="apellido" />
+        <input type="number" name="edad" />
+        <button class="add">Add</button>
+        <button class="edit">Edit</button>
+        <button class="delete">Delete</button>
+    </form>
+    <script>
+        // Recogemos con fetch los datos que hemos enviado con la petición get:
+        fetch("/personas")
+            .then(function (response) {
+                return response.json();
+            }).then(function (res) {
+                // Recorremos el array mediante un for, y lo printeamos en el ul de arriba:
+                for (let i = 0; i < res.personas.length; i++) {
+                    document.querySelector("body .ul").innerHTML += `<li>Nombre: <b>${res.personas[i].nombre}</b><br>Apellido: <b>${res.personas[i].apellido}</b><br>Edad: <b>${res.personas[i].edad}</b></li><br>`
+                }
+            })
+
+        //2. Creamos un formulario para que el usuario añada mediante el fect de method: POST el nuevo array al objeto:
+        document.querySelector(".add").addEventListener("click", function (event) {
+            event.preventDefault();
+            let nombre = document.querySelector("input[name='nombre']").value;
+            let apellido = document.querySelector("input[name='apellido']").value;
+            let edad = document.querySelector("input[name='edad']").value;
+            let personas2 = {
+                nombre: nombre,
+                apellido: apellido,
+                edad: edad,
+            };
+            //Pasamos a string la información:
+            let body = JSON.stringify(personas2);
+            //Usamos un fetch de method: POST para subir la nueva información al objeto personas:
+            fetch("/personas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: body
+            }).then(function (response) {
+                return response.json()
+            }).then(function (res) {
+                console.log(res)
+            });
+            //Llamamos a la función f5 para refresque la página:
+            f5();
+        })
+
+        //3. Creamos otro botón para editar entradas existentes:
+        document.querySelector(".edit").addEventListener("click", function (event) {
+            event.preventDefault();
+            let nombre = document.querySelector("input[name='nombre']").value;
+            let apellido = document.querySelector("input[name='apellido']").value;
+            let edad = document.querySelector("input[name='edad']").value;
+            let personas3 = {
+                nombre: nombre,
+                apellido: apellido,
+                edad: edad,
+            };
+            //Pasamos a string la información:
+            let body2 = JSON.stringify(personas3);
+
+            fetch("/personas", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: body2
+            }).then(function (response) {
+                return response.json()
+            }).then(function (res) {
+                console.log(res)
+            });
+            //Llamamos a la función f5 para refresque la página:
+            f5();
+        });
+        
+        //4. Creamos otro botón para eliminar entradas existentes:
+
+        document.querySelector(".delete").addEventListener("click", function (event) {
+            event.preventDefault();
+            let nombre = document.querySelector("input[name='nombre']").value;
+            let apellido = document.querySelector("input[name='apellido']").value;
+            let edad = document.querySelector("input[name='edad']").value;
+            let personas4 = {
+                nombre: nombre,
+                apellido: apellido,
+                edad: edad,
+            };
+            //Pasamos a string la información:
+            console.log(personas4);
+            let body3 = JSON.stringify(personas4);
+
+            fetch("/personas", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: body3
+            }).then(function (response) {
+                return response.json()
+            }).then(function (res) {
+                console.log(res)
+            });
+            //Llamamos a la función f5 para refresque la página:
+            f5();
+        });
+        function f5(){
+            location.reload();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <input type="text" name= "nombre"/>
+        <input type="number" name= "edad"/>
+        <input type="text" name= "origen"/>
+        <button>Enviar</button>
+    </form>
+
+
+    <script>
+        document.querySelector("button").addEventListener("click", function(event){
+            event.preventDefault();
+            let nombre = document.querySelector("input[name='nombre']").value;
+            let edad = document.querySelector("input[name='edad']").value;
+            let origen = document.querySelector("input[name='origen']").value;
+            let persona = {
+                nombre: nombre,
+                edad: edad,
+                origen: origen
+            };
+            let body = JSON.stringify(persona)
+
+            fetch("/persona", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: body
+            }).then(function(response){
+                return response.json()
+            }).then(function(res){
+                console.log(res)
+            })
+
+
+            fetch("/persona", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: body
+            }).then(function(response){
+                return response.json()
+            }).then(function(res){
+                console.log(res)
+            })
+        })
+    </script>
+    
+</body>
+</html>
